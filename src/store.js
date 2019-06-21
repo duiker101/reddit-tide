@@ -13,8 +13,7 @@ export default new Vuex.Store({
     },
     getters: {
         allPosts(state) {
-            // return Object.values(state.posts).sort((a, b) => b.data.created_utc - a.data.created_utc)
-            return state.posts.sort((a, b) => b.data.created_utc - a.data.created_utc)
+            return state.posts
         },
         lastId(state) {
             return state.last
@@ -25,9 +24,8 @@ export default new Vuex.Store({
             if (posts.length <= 0)
                 return;
             let new_posts = [...state.posts, ...posts].sort((a, b) => b.data.created_utc - a.data.created_utc)
-            // state.posts = new_posts.slice(0,1000)
+            // todo limit amount of posts in history?
             state.posts = new_posts
-            // state.last = posts.sort((a, b) => parseInt(b.data.id,36) - parseInt(a.data.id,36))[0].data.id
             state.last = posts[0].data.id
         },
     },
