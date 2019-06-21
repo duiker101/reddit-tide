@@ -8,8 +8,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         posts: [],
-        fetchingIds: [],
-        last: null
+        last: null,
+        filter: ''
     },
     getters: {
         allPosts(state) {
@@ -17,6 +17,9 @@ export default new Vuex.Store({
         },
         lastId(state) {
             return state.last
+        },
+        filter(state){
+            return state.filter
         }
     },
     mutations: {
@@ -28,6 +31,9 @@ export default new Vuex.Store({
             state.posts = new_posts
             state.last = posts[0].data.id
         },
+        setFilter(state,filter){
+            state.filter = filter
+        }
     },
     actions: {
         fetchNewPosts({commit}) {

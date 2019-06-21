@@ -22,10 +22,16 @@
             return {ids: [], canScrollTop: false}
         },
         computed: {
-            ...mapGetters(['allPosts', 'lastId']),
-            filteredPosts(){
+            ...mapGetters(['allPosts', 'lastId', 'filter']),
+            filteredPosts() {
                 // TODO real filter
-                return this.allPosts.filter(p => !!window.FILTER ? eval(window.filter) : true)
+                return this.allPosts.filter(p => {
+                    try{
+                        return this.filter.length <= 0 || eval(this.filter)
+                    }catch(e){
+                        return false
+                    }
+                })
             }
         },
         methods: {
@@ -39,7 +45,7 @@
         },
         created() {
             this.fetchNewPosts().then(new_posts => {
-                setInterval(this.fetchMore, 2000)
+                setInterval(this.fetchMore, 10000)
             })
 
         },

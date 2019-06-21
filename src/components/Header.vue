@@ -1,6 +1,7 @@
 <template>
     <header>
         <el-button @click="scrollTop" :disabled="!canScrollTop">Back to top</el-button>
+        <el-input v-model="filter"></el-input>
         {{count}} {{newCount}}
     </header>
 </template>
@@ -20,6 +21,14 @@
             },
             newCount() {
                 return !this.canScrollTop ? 0 : this.allPosts.length - this.lastTop;
+            },
+            filter: {
+                get () {
+                    return this.$store.state.filter
+                },
+                set (value) {
+                    this.$store.commit('setFilter', value)
+                }
             }
         },
         watch: {
