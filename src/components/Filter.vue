@@ -43,6 +43,12 @@
         watch: {
             action(val) {
                 this.updateFilter()
+            },
+            attr(val){
+                this.updateFilter()
+            },
+            value(val){
+                this.updateFilter()
             }
         }
     }

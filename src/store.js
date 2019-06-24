@@ -10,7 +10,7 @@ export default new Vuex.Store({
         posts: [],
         last: null,
         pause: false,
-        filters: {'0': {attribute: 'over_18', action: 'is_not', value: 'true', id: 0}},
+        filters: {},
         sidebar: false
     },
     getters: {
