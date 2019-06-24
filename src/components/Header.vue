@@ -46,13 +46,13 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     header {
         grid-column: 1 / 3;
         padding: 1em;
         border-bottom: 1px solid rgba(50, 50, 50, 0.3);
         display: grid;
-        grid-template-columns: 80px 80px 100px 150px;
+        grid-template-columns: 80px 80px 90px 170px;
         line-height: 40px;
         text-align: center;
     }
@@ -61,12 +61,17 @@
         display: none;
     }
 
+    .el-checkbox{
+        margin-left:1em;
+    }
+
     @media only screen and (max-width: 800px) {
         header {
             grid-template-columns: repeat(4, 1fr) auto;
         }
-        .name{
-            display:none;
+
+        .name {
+            display: none;
         }
 
         .expand {

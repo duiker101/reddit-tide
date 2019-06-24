@@ -1,8 +1,11 @@
 <template>
     <div class="sidebar" :class="{open:sidebarVisible}">
         <div class="side-wrapper">
-            <div v-if="sidebarVisible" class="header">
-                <el-button type="text" icon="el-icon-close" @click="closeSidebar" circle></el-button>
+            <div class="header">
+                <span v-if="sidebarVisible">
+                    <el-button class="close" type="text" icon="el-icon-close" @click="closeSidebar" ></el-button>
+                </span>
+                Filters
             </div>
             <div class="actions">
                 <el-button icon="el-icon-plus" @click="add"/>
@@ -10,6 +13,7 @@
                     <el-option label="NSFW" value="nsfw"/>
                     <el-option label="Has thumbnail" value="thumb"/>
                     <el-option label="Is GIF" value="gif"/>
+                    <el-option label="Selft Text" value="text"/>
                 </el-select>
             </div>
             <FilterItem v-for="f in filters" :filter="f" :key="f.id"/>
@@ -32,15 +36,17 @@
         methods: {
             ...mapActions(['closeSidebar', 'addFilter']),
             setPreset() {
-                if(this.preset === 'nsfw')
+                if (this.preset === 'nsfw')
                     this.addFilter({attribute: 'over_18', action: 'is', value: 'true'})
-                else if(this.preset === 'thumb')
+                else if (this.preset === 'thumb')
                     this.addFilter({attribute: 'over_18', action: 'is', value: 'true'})
-                else if(this.preset === 'gif')
+                else if (this.preset === 'gif')
                     this.addFilter({attribute: 'url', action: 'contains', value: '.gif'})
+                else if (this.preset === 'text')
+                    this.addFilter({attribute: 'is_self', action: 'is', value: 'true'})
                 this.preset = ''
             },
-            add(){
+            add() {
                 this.addFilter(null)
             }
         }
@@ -48,6 +54,7 @@
 </script>
 
 <style lang="scss" scoped>
+
     .actions {
         margin-bottom: 1em;
     }
@@ -57,16 +64,23 @@
     }
 
     .header {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.2)
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 1em;
+        font-weight: 700;
     }
 
     .sidebar {
-        width: 320px;
+        width: calc(300px + 2em);
+        border-left: 1px solid #ddd;
     }
 
     .side-wrapper {
         width: 300px;
         padding: 1em;
+    }
+
+    .close{
+        padding: .3em;
     }
 
     @media only screen and (max-width: 800px) {
@@ -85,7 +99,7 @@
         }
         .sidebar.open {
             box-shadow: -10px 0 10px rgba(0, 0, 0, 0.2);
-            width: 320px;
+            width: calc(300px + 2em);
         }
     }
 </style>

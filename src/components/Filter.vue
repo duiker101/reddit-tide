@@ -6,6 +6,7 @@
             <el-option label="Author" value="author"/>
             <el-option label="Domain" value="domain"/>
             <el-option label="NSFW" value="over_18"/>
+            <el-option label="Is Text" value="is_selft"/>
         </el-select>
         <el-select v-model="action">
             <el-option label="is" value="is"></el-option>
@@ -16,7 +17,7 @@
             <el-option label="Less than" value="less_than"></el-option>
         </el-select>
         <el-input v-model="value" placeholder="Value"/>
-        <el-button icon="el-icon-close" @click="remove" circle/>
+        <el-button type="text" icon="el-icon-close" @click="remove" circle/>
     </div>
 </template>
 
