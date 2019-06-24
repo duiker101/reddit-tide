@@ -21,7 +21,7 @@
         computed: {
             thumbnail() {
                 try {
-                    return this.post.data.preview.images[0].resolutions[0].url.replace(new RegExp('&amp;', 'g'), '&')
+                    return this.post.data.preview.images[0].resolutions[1].url.replace(new RegExp('&amp;', 'g'), '&')
                 } catch (e) {
                     return null;
                 }
@@ -67,11 +67,11 @@
     .thumbnail {
         align-self: center;
         grid-row: 1 / 3;
-        width: 80px;
-        height: 60px;
+        width: 150px;
+        height: 120px;
         div{
-            width: 80px;
-            height: 60px;
+            width: 150px;
+            height: 120px;
             border-radius: 4px;
             background-size: cover;
             background-repeat: no-repeat;

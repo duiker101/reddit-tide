@@ -9,7 +9,9 @@ export default new Vuex.Store({
     state: {
         posts: [],
         last: null,
-        filter: ''
+        pause: false,
+        filters: {'0': {attribute: 'over_18', action: 'is_not', value: 'true', id: 0}},
+        sidebar: false
     },
     getters: {
         allPosts(state) {
@@ -18,21 +20,55 @@ export default new Vuex.Store({
         lastId(state) {
             return state.last
         },
-        filter(state){
-            return state.filter
+        filters(state) {
+            return Object.values(state.filters)
+        },
+        sidebarVisible(state) {
+            return state.sidebar
         }
     },
     mutations: {
         setPosts(state, posts) {
             if (posts.length <= 0)
                 return;
-            let new_posts = [...state.posts, ...posts].sort((a, b) => b.data.created_utc - a.data.created_utc)
+            let new_posts = posts.filter(p => {
+                try {
+                    for (let filter of Object.values(state.filters)) {
+                        if (!testFilter(p, filter))
+                            return false;
+                    }
+                } catch (e) {
+                    console.log(e)
+                    return false;
+                }
+                return true;
+            })
+
+            new_posts = [...state.posts, ...new_posts]
             // todo limit amount of posts in history?
-            state.posts = new_posts
+            state.posts = new_posts.sort((a, b) => b.data.created_utc - a.data.created_utc)
             state.last = posts[0].data.id
         },
-        setFilter(state,filter){
-            state.filter = filter
+        clearPosts(state) {
+            state.posts = []
+        },
+        setSidebar(state, open) {
+            state.sidebar = open;
+        },
+        setFilter(state, {id, filter}) {
+            state.filters[id] = filter
+        },
+        addFilter(state) {
+            let keys = Object.keys(state.filters)
+            let id = 0;
+            if (keys.length > 0)
+                id = parseInt(keys.sort()[keys.length-1]) + 1
+            state.filters = {...state.filters, [id]: {attribute: '', action: 'is', value: '', id}}
+        },
+        removeFilter(state, id) {
+            let filters = {...state.filters}
+            delete filters[id]
+            state.filters = filters
         }
     },
     actions: {
@@ -48,6 +84,64 @@ export default new Vuex.Store({
                 commit('setPosts', data.children.filter(d => d.data.created_utc < now))
                 return data.children
             });
+        },
+        clearPosts({commit}) {
+            commit('clearPosts')
+        },
+        openSidebar({commit}) {
+            commit('setSidebar', true)
+        },
+        closeSidebar({commit}) {
+            commit('setSidebar', false)
+        },
+        addFilter({commit}) {
+            commit('addFilter', null)
+        },
+        setFilter({commit}, payload) {
+            commit('setFilter', payload)
+        },
+        removeFilter({commit}, id) {
+            commit('removeFilter', id)
         }
     }
 })
+
+function testFilter(post, f) {
+    let value = post.data[f.attribute];
+    if (value === undefined)
+        value = null
+    else
+        value = value + ''
+    let fvalue = f.value + ''
+
+    switch (f.action) {
+        case 'is':
+            if (value === fvalue || value + '' === fvalue + '')
+                return true;
+            break;
+        case 'is_not':
+            if (value !== fvalue && value + '' !== fvalue + '')
+                return true;
+            break;
+        case 'contains':
+            if (value !== null && (value + '').indexOf(fvalue) >= 0)
+                return true;
+            break;
+        case 'not_contains':
+            if (value === null || value.indexOf(fvalue) < 0)
+                return true;
+            break;
+        case 'less_than':
+            if (parseFloat(value) < parseFloat(fvalue))
+                return true;
+            break;
+        case 'more_than':
+            if (parseFloat(value) > parseFloat(fvalue))
+                return true;
+            break;
+        default:
+            return false;
+
+    }
+}
+
