@@ -1,6 +1,6 @@
 <template>
     <div class="filter">
-        <el-select v-model="attr">
+        <el-select placeholder="Attribute" v-model="attr">
             <el-option label="Title" value="title"/>
             <el-option label="Subreddit" value="subreddit"/>
             <el-option label="Author" value="author"/>
@@ -15,7 +15,7 @@
             <el-option label="More than" value="more_than"></el-option>
             <el-option label="Less than" value="less_than"></el-option>
         </el-select>
-        <el-input v-model="value"/>
+        <el-input v-model="value" placeholder="Value"/>
         <el-button icon="el-icon-close" @click="remove" circle/>
     </div>
 </template>

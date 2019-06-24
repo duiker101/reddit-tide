@@ -58,12 +58,16 @@ export default new Vuex.Store({
         setFilter(state, {id, filter}) {
             state.filters[id] = filter
         },
-        addFilter(state) {
+        addFilter(state, filter) {
             let keys = Object.keys(state.filters)
             let id = 0;
             if (keys.length > 0)
-                id = parseInt(keys.sort()[keys.length-1]) + 1
-            state.filters = {...state.filters, [id]: {attribute: '', action: 'is', value: '', id}}
+                id = parseInt(keys.sort()[keys.length - 1]) + 1
+            if (filter === null)
+                filter = {attribute: '', action: 'is', value: '', id}
+            else
+                filter.id = id
+            state.filters = {...state.filters, [id]: filter}
         },
         removeFilter(state, id) {
             let filters = {...state.filters}
@@ -94,8 +98,8 @@ export default new Vuex.Store({
         closeSidebar({commit}) {
             commit('setSidebar', false)
         },
-        addFilter({commit}) {
-            commit('addFilter', null)
+        addFilter({commit},filter) {
+            commit('addFilter', filter)
         },
         setFilter({commit}, payload) {
             commit('setFilter', payload)
