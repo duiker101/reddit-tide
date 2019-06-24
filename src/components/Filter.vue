@@ -51,7 +51,7 @@
 <style lang="scss" scoped>
     .filter {
         display: grid;
-        grid-template-columns: auto auto 1fr auto;
+        grid-template-columns: auto auto auto auto;
     }
 
 </style>

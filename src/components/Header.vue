@@ -1,11 +1,11 @@
 <template>
     <header>
-        <el-button @click="scrollTop" :disabled="!canScrollTop">Back to top</el-button>
+        <el-button @click="scrollTop" :disabled="!canScrollTop">Top</el-button>
         <el-button @click="clearPosts">Clear</el-button>
         <el-checkbox :value="pause" @change="(val)=>$emit('update:pause', val)">Pause</el-checkbox>
-        {{count}} {{newCount}}
+        <div><span class="name">Count:</span>{{count}} <span class="name">New:</span>{{newCount}}</div>
         <div class="expand">
-            <el-button icon="el-icon-more" @click="openSidebar" circle></el-button>
+            <el-button type="text" icon="el-icon-more" @click="openSidebar"/>
         </div>
     </header>
 </template>
@@ -52,15 +52,25 @@
         padding: 1em;
         border-bottom: 1px solid rgba(50, 50, 50, 0.3);
         display: grid;
-        grid-template-columns: 300px repeat(4, 100px);
+        grid-template-columns: 80px 80px 100px 150px;
+        line-height: 40px;
+        text-align: center;
+    }
+
+    .expand {
+        display: none;
     }
 
     @media only screen and (max-width: 800px) {
         header {
-            grid-template-columns: 300px repeat(4, 100px) 1fr auto;
+            grid-template-columns: repeat(4, 1fr) auto;
+        }
+        .name{
+            display:none;
         }
 
         .expand {
+            display: block;
             width: 50px;
         }
     }
