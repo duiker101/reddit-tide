@@ -6,6 +6,10 @@
         <h3><a :href="`https://reddit.com${post.data.permalink}`" target="_blank">{{post.data.title}}</a></h3>
         <div class="details">
             <b v-if="post.data.over_18">NSFW</b>
+            <span v-if="post.data.domain.indexOf('self.')!== 0">
+                <a target="_blank" :href="'https://'+post.data.domain">{{post.data.domain}}</a>
+                -
+            </span>
             <b><a target="_blank" :href="'https://reddit.com/r/'+post.data.subreddit">r/{{post.data.subreddit}}</a></b>
             -
             <a target="_blank" :href="'https://reddit.com/u/'+post.data.authro">u/{{post.data.author}}</a>
@@ -65,10 +69,11 @@
         grid-template-rows: auto 1fr;
         grid-gap: .5em;
     }
-    .details{
+
+    .details {
         b {
-            margin-right:1em;
-            color:red;
+            margin-right: 1em;
+            color: red;
         }
     }
 

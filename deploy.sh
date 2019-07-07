@@ -11,7 +11,7 @@ vue-cli-service build
 cd dist
 
 # if you are deploying to a custom domain
-# echo 'www.example.com' > CNAME
+echo 'tide.duiker101.net' > CNAME
 
 git init
 git add -A
