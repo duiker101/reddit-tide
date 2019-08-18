@@ -9,8 +9,8 @@ Vue.use(Vuex)
 let defFilter ={}
 
 try{
-    defFilter = query.data ? JSON.parse(atob(query.data)).filters : {}
     let query = queryString.parse(location.search)
+    defFilter = query.data ? JSON.parse(atob(query.data)).filters : {}
 }catch (e) {}
 
 function updateQuery(filters){

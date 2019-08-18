@@ -24,3 +24,5 @@ git commit -m 'deploy'
 git push -f https://github.com/duiker101/reddit-tide.git master:gh-pages
 
 cd -
+
+rm -rf dist
