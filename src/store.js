@@ -54,6 +54,9 @@ export default new Vuex.Store({
                 return true;
             })
 
+            let titles = state.posts.map(p => p.data.title)
+            new_posts = new_posts.filter(p => !titles.includes(p.data.title))
+
             new_posts = [...state.posts, ...new_posts]
             // todo limit amount of posts in history?
             state.posts = new_posts.sort((a, b) => b.data.created_utc - a.data.created_utc)
