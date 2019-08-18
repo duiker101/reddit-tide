@@ -6,8 +6,12 @@ import * as queryString from "query-string";
 
 Vue.use(Vuex)
 
-let query = queryString.parse(location.search)
-let defFilter = query.data ? JSON.parse(atob(query.data)).filters : {}
+let defFilter ={}
+
+try{
+    defFilter = query.data ? JSON.parse(atob(query.data)).filters : {}
+    let query = queryString.parse(location.search)
+}catch (e) {}
 
 function updateQuery(filters){
     let data = btoa(JSON.stringify({filters}));
