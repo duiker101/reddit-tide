@@ -2,15 +2,25 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import reddit_api from "./reddit_api";
 import * as moment from "moment";
+import * as queryString from "query-string";
 
 Vue.use(Vuex)
+
+let query = queryString.parse(location.search)
+let defFilter = query.data ? JSON.parse(atob(query.data)).filters : {}
+
+function updateQuery(filters){
+    let data = btoa(JSON.stringify({filters}));
+    let url = window.location.origin + '/?data=' + encodeURIComponent(data);
+    window.history.pushState({path: url}, '', url);
+}
 
 export default new Vuex.Store({
     state: {
         posts: [],
         last: null,
         pause: false,
-        filters: {},
+        filters: defFilter,
         sidebar: false
     },
     getters: {
@@ -57,6 +67,7 @@ export default new Vuex.Store({
         },
         setFilter(state, {id, filter}) {
             state.filters[id] = filter
+            updateQuery(state.filters)
         },
         addFilter(state, filter) {
             let keys = Object.keys(state.filters)
@@ -68,12 +79,14 @@ export default new Vuex.Store({
             else
                 filter.id = id
             state.filters = {...state.filters, [id]: filter}
+            updateQuery(state.filters)
         },
         removeFilter(state, id) {
             let filters = {...state.filters}
             delete filters[id]
             state.filters = filters
-        }
+            updateQuery(state.filters)
+        },
     },
     actions: {
         fetchNewPosts({commit}) {
@@ -98,7 +111,7 @@ export default new Vuex.Store({
         closeSidebar({commit}) {
             commit('setSidebar', false)
         },
-        addFilter({commit},filter) {
+        addFilter({commit}, filter) {
             commit('addFilter', filter)
         },
         setFilter({commit}, payload) {

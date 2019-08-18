@@ -7,6 +7,7 @@
         <div class="expand">
             <el-button type="text" icon="el-icon-more" @click="openSidebar"/>
         </div>
+        <div class="progress" :style="{width:progress+'%'}"></div>
     </header>
 </template>
 
@@ -14,7 +15,7 @@
     import {mapActions, mapGetters} from "vuex";
 
     export default {
-        props: {scrollTop: Function, clear: Function, canScrollTop: false, pause: false},
+        props: {scrollTop: Function, clear: Function, canScrollTop: false, pause: false, progress: 0},
         data() {
             return {lastTop: 0, pp: this.pause}
         },
@@ -61,8 +62,8 @@
         display: none;
     }
 
-    .el-checkbox{
-        margin-left:1em;
+    .el-checkbox {
+        margin-left: 1em;
     }
 
     @media only screen and (max-width: 800px) {
@@ -78,6 +79,10 @@
             display: block;
             width: 50px;
         }
+    }
+    .progress{
+        height: 2px;
+        background: blue;
     }
 
 </style>

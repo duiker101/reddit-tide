@@ -2,14 +2,14 @@
     <div class="wrapper">
         <Header :scrollTop="()=>$refs.main.scrollTo(0,0)"
                 :canScrollTop="canScrollTop"
-
+                :progress="progress"
                 :pause="pause"
                 v-bind:pause.sync="pause"
         />
         <main ref="main">
             <Post v-for="p in allPosts" :key="p.data.name" :post="p"/>
         </main>
-        <Sidebar />
+        <Sidebar/>
     </div>
 </template>
 
@@ -27,13 +27,21 @@
         name: 'home',
         components: {Sidebar, Post, Header},
         data() {
-            return {ids: [], canScrollTop: false, pause: false}
+            return {ids: [], canScrollTop: false, pause: false, progress: 0, tickSpeed: 1000}
         },
         computed: {
             ...mapGetters(['allPosts', 'lastId']),
         },
         methods: {
             ...mapActions(['fetchNewPosts', 'fetchPosts']),
+            tick() {
+                let refreshRate = 10000;
+                if (this.progress >= 100) {
+                    this.progress = 0
+                    this.fetchMore()
+                }
+                this.progress += (100 * this.tickSpeed) / refreshRate
+            },
             fetchMore() {
                 if (this.pause)
                     return
@@ -43,11 +51,11 @@
                 })
             },
             startFetch() {
-                if(timer !== null)
+                if (timer !== null)
                     clearInterval(timer)
 
                 this.fetchNewPosts().then(new_posts => {
-                    timer = setInterval(this.fetchMore, 10000)
+                    timer = setInterval(this.tick, this.tickSpeed)
                 })
             }
         },
@@ -89,9 +97,9 @@
         grid-template-rows: auto 1fr;
     }
 
-    @media only screen and (max-width:800px){
-        main{
-            grid-column:1 / 3;
+    @media only screen and (max-width: 800px) {
+        main {
+            grid-column: 1 / 3;
         }
     }
 </style>
